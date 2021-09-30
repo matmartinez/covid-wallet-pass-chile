@@ -1,0 +1,264 @@
+$font: system-ui, sans-serif;
+
+$background-color-primary: #F9F9FB;
+$background-color-secondary: #FFF;
+
+$label-color-primary: #28283D;
+$label-color-secondary: rgba(#28283D, 0.75);
+$label-color-tertiary: rgba(#28283D, 0.6);
+
+$inter-spacing: 20px;
+$margin: 32px;
+
+//
+// Document
+// 
+
+html, body {
+  background-color: $background-color-primary;
+}
+
+//
+// Covid Pass
+// 
+
+.covid-pass {
+  
+  main {
+    font-family: $font;
+    font-size: 17px;
+    line-height: 1.4;
+    
+    color: $label-color-primary;
+    -webkit-font-smoothing: antialiased;
+    
+    margin: $margin;
+  }
+  
+  //
+  // General
+  // 
+  
+  .content {
+    max-width: 370px;
+    margin: 0 auto;
+    
+    * + * {
+      margin-top: $inter-spacing;
+    }
+  }
+  
+  .hidden {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    
+    visibility: hidden;
+  }
+  
+  //
+  // Text
+  // 
+  
+  h1 {
+    font-size: 28px;
+    font-weight: 800;
+  }
+  
+  h2 {
+    font-size: 24px;
+    font-weight: 700;
+  }
+  
+  h3 {
+    font-size: 20px;
+    font-weight: 700;
+  }
+  
+  h4 {
+    font-size: 17px;
+    font-weight: 700;
+  }
+  
+  a {
+    color: inherit;
+  }
+  
+  em, i {
+    font-style: italic;
+  }
+  
+  //
+  // Header.
+  //
+  
+  main > header {
+    
+    hgroup {
+      line-height: 1.2;
+    }
+    
+    h2 {
+      color: $label-color-secondary;
+    }
+    
+  }
+  
+  //
+  // Generator
+  //
+  
+  .generator {
+    text-align: center;
+    margin: $inter-spacing * 2;
+    
+    @media only screen and (max-width: 370px) {
+      margin-left: 0px;
+      margin-right: 0px;
+    }
+    
+    .widget {
+      
+      .add-to-wallet {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        -ms-appearance: none;
+        
+        border: none;
+        background: none;
+        
+        cursor: pointer;
+        
+        transition: opacity ease-out 0.2s;
+        
+        &[disabled] {
+          opacity: 0.5;
+        }
+      }
+      
+      .label {
+        font-size: 17px;
+        font-weight: 600;
+      }
+      
+      .icon {
+        margin-bottom: 8px;
+      }
+      
+    }
+    
+    aside {
+      font-size: 14px;
+      color: $label-color-tertiary;
+      
+      a {
+        color: inherit;
+        text-decoration: underline;
+      }
+    }
+    
+  }
+  
+  //
+  // Where did it go?
+  //
+  
+  .where-did-it-go {
+    background: $background-color-secondary;
+    border-radius: 16px;
+    
+    .container {
+      padding: $margin;
+      padding-bottom: 0;
+    }
+    
+    header {
+      color: #FB0D44; 
+    }
+    
+    .open-wallet li {
+      display: table;
+      width: 100%;
+      
+      span {
+        display: table-cell;
+        vertical-align: top;
+        
+        padding-left: 16px;
+      }
+      
+      .icon {
+        padding-top: 4px;
+      }
+      
+    }
+    
+    .screenshot {
+      max-width: 80%;
+      margin: 0 auto;
+      margin-top: $inter-spacing * 2;
+      
+      display: block;
+      height: 330px;
+      
+      background-size: cover;
+      background-position: top center;
+      background-image: url(img/Screenshot@2x.png);
+    }
+    
+  }
+  
+  //
+  // QA
+  //
+  
+  .qa {
+    
+    header h2 {
+      $spacing: 10px;
+      
+      display: table;
+      width: 100%;
+      
+      figure {
+        margin-top: $spacing;
+      }
+      
+      span {
+        display: table-cell;
+        vertical-align: middle;
+        width: 100%;
+        
+        padding-left: $spacing;
+      }
+    }
+      
+  }
+  
+  //
+  // Footer
+  //
+  
+  main > footer {
+    font-size: 14px;
+    color: $label-color-tertiary;
+    
+    margin-top: $inter-spacing * 2;
+    
+    a {
+      font-weight: 600;
+      text-decoration: none;
+    }
+    
+    .content * + * {
+      margin-top: 4px;
+    }
+    
+  }
+  
+}
+
+

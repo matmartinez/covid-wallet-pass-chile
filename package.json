@@ -1,0 +1,28 @@
+{
+  "name": "covid-wallet-pass-chile",
+  "version": "1.0.0",
+  "description": "Takes a 'Mobility Pass' (Pase de Movilidad) approved by the Chilean government and generates a pass from it.",
+  "scripts": {
+    "start": "parcel serve index.html",
+    "build": "parcel build index.html"
+  },
+  "keywords": [ "covid", "passbook" ],
+  "author": "Matías Martínez",
+  "license": "ISC",
+  "devDependencies": {
+    "@parcel/transformer-image": "^2.0.0-rc.0",
+    "@parcel/transformer-sass": "^2.0.0-rc.0",
+    "parcel": "^2.0.0-rc.0",
+    "parcel-reporter-static-files-copy": "^1.3.0"
+  },
+  "browserslist": [
+    "since 2019-01"
+  ],
+  "dependencies": {
+    "crypto": "^1.0.1",
+    "file-saver": "^2.0.5",
+    "jsqr": "^1.4.0",
+    "jszip": "^3.7.1",
+    "pdfjs-dist": "^2.9.359"
+  }
+}
