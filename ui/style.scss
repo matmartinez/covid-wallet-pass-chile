@@ -1,14 +1,31 @@
 $font: system-ui, sans-serif;
 
-$background-color-primary: #F9F9FB;
-$background-color-secondary: #FFF;
+$background-color-primary: #fff;
+$background-color-secondary: #F9F9FB;
 
-$label-color-primary: #28283D;
-$label-color-secondary: rgba(#28283D, 0.75);
-$label-color-tertiary: rgba(#28283D, 0.6);
+$label-color-primary: #000000;
+$label-color-secondary: #828282;
+$label-color-tertiary: #828282;
 
 $inter-spacing: 20px;
 $margin: 32px;
+
+$base-width: 0px;
+$small-width: 400px;
+$medium-width: 600px;
+$large-width: 800px;
+
+@mixin at-maximum($size){
+  @media only screen and (max-width: $size) {
+    @content;
+  }
+}
+
+@mixin at-minimum($size){
+  @media only screen and (min-width: $size) {
+    @content;
+  }
+}
 
 //
 // Document
@@ -16,6 +33,7 @@ $margin: 32px;
 
 html, body {
   background-color: $background-color-primary;
+  scroll-behavior: smooth;
 }
 
 //
@@ -26,25 +44,104 @@ html, body {
   
   main {
     font-family: $font;
-    font-size: 17px;
-    line-height: 1.4;
     
     color: $label-color-primary;
     -webkit-font-smoothing: antialiased;
     
-    margin: $margin;
+    & > * {
+      margin-top: $margin;
+      margin-bottom: $margin;
+      
+      @include at-minimum($medium-width) {
+        &:not(:first-child) { 
+          margin-bottom: $margin * 2;
+        }
+      }
+    }
   }
   
   //
-  // General
+  // Text
+  //
+  
+  line-height: 1.4;
+  
+  h1 {
+    font-weight: 800;
+  }
+  
+  h2 {
+    font-weight: 700;
+  }
+  
+  h3 {
+    font-weight: 700;
+  }
+  
+  h4 {
+    font-weight: 700;
+  }
+  
+  a {
+    color: inherit;
+  }
+  
+  em, i {
+    font-style: italic;
+  }
+  
+  $text-scaling-factors: ($base-width: 1, $medium-width: 1.2, $large-width: 1.5);
+  
+  @each $width, $scale in $text-scaling-factors {
+    
+    @include at-minimum($width) {
+      font-size: 17px * $scale;
+      
+      h1 {
+        font-size: 34px * $scale;
+      }
+      
+      h2 {
+        font-size: 26px * $scale;
+      }
+      
+      h3 {
+        font-size: 20px * $scale;
+      }
+      
+      h4 {
+        font-size: 17px * $scale;
+      }
+      
+      small {
+        font-size: 14px * $scale;
+      }
+    }
+    
+  }
+  
+  //
+  // General Layout
   // 
   
   .content {
-    max-width: 370px;
+    max-width: $large-width;
     margin: 0 auto;
     
     * + * {
       margin-top: $inter-spacing;
+    }
+    
+    $scaling-factors: ($base-width: 1, $medium-width: 3, $large-width: 4);
+    
+    @each $width, $scale in $scaling-factors {
+    
+      @include at-minimum($width) {
+        $margin: $margin * $scale;
+        
+        padding-left: $margin;
+        padding-right: $margin;
+      }
     }
   }
   
@@ -60,36 +157,163 @@ html, body {
   }
   
   //
-  // Text
+  // Header
+  //
+  
+  main > header {
+    color: $label-color-secondary;
+    
+    nav {
+      display: table;
+      
+      & > * {
+        display: table-cell;
+        vertical-align: middle;
+        
+        @include at-maximum(350px) {
+          display: block;
+        }
+      }
+      
+    }
+    
+    .branding {
+      font-size: 24px;
+      font-style: italic;
+      font-weight: 800;
+      
+      a {
+        text-decoration: none;
+        
+        &:hover {
+          color: $label-color-primary;
+        }
+      }
+    }
+    
+    .anchors {
+      width: 100%;
+      text-align: right;
+      
+      a {
+        display: inline-block;
+        
+        font-weight: 600;
+        text-decoration: none;
+        
+        margin-top: 0;
+        
+        &:hover {
+          text-decoration: underline;
+        }
+        
+        &:not(:last-child) {
+          margin-right: 1em;
+        }
+        
+        figure {
+          display: inline;
+          margin-right: 2px;
+          
+          svg {
+            vertical-align: middle;
+          }
+        }
+      }
+      
+    }
+    
+  }
+  
+  //
+  // Introduction
   // 
   
-  h1 {
-    font-size: 28px;
-    font-weight: 800;
+  .introduction {
+    $scaling-factors: ($base-width: 1, $small-width: 1.25, $medium-width: 1.5, $large-width: 2);
+    
+    $h1: 34px;
+    $h2: 29px;
+    
+    $emoji-size: (123, 28);
+    $emoji-slices: ("frog", 0, 0, 29, 23),
+                   ("peach", 29, 0, 28, 28),
+                   ("apple-watch", 57, 0, 20, 29),
+                   ("iphone", 78, 0, 16, 29),
+                   ("wallet", 94, 0, 29, 29);
+    
+    .hero {
+      padding: $inter-spacing;
+      
+      img {
+        display: block;
+        max-height: 600px;
+        margin: 0 auto;
+      }
+    }
+    
+    img {
+      max-width: 100%;
+      width: auto;
+      height: auto;
+    }
+    
+    h1 {
+      font-weight: 800;
+      line-height: 1.2;
+      color: $label-color-primary;
+    }
+    
+    h2 {
+      font-weight: 600;
+      line-height: 1.3;
+      color: $label-color-secondary;
+    }
+    
+    .emoji {
+      background-image: url(img/Emojis.jpg);
+      background-repeat: no-repeat;
+      
+      display: inline-block;
+      position: relative;
+      margin: 0px;
+      margin-bottom: -0.15em;
+    }
+    
+    @each $width, $scale in $scaling-factors {
+      @include at-minimum($width) {
+        h1 {
+          font-size: $h1 * $scale;
+        }
+        
+        h2 {
+          font-size: $h2 * $scale;
+        }
+        
+        .emoji {
+          $width: nth($emoji-size, 1) * $scale;
+          $height: nth($emoji-size, 2) * $scale;
+          background-size: #{$width}px #{$height}px;
+          
+          @each $slice in $emoji-slices {
+            $name: nth($slice, 1);
+            $dx: nth($slice, 2) * $scale;
+            $dy: nth($slice, 3) * $scale;
+            $width: nth($slice, 4) * $scale;
+            $height: nth($slice, 5) * $scale;
+            
+            &.#{$name} {
+              width: #{$width}px;
+              height: #{$height}px;
+              background-position: #{-$dx}px #{-$dy}px;
+            }
+          }
+        }
+      }
+    }
+    
   }
   
-  h2 {
-    font-size: 24px;
-    font-weight: 700;
-  }
-  
-  h3 {
-    font-size: 20px;
-    font-weight: 700;
-  }
-  
-  h4 {
-    font-size: 17px;
-    font-weight: 700;
-  }
-  
-  a {
-    color: inherit;
-  }
-  
-  em, i {
-    font-style: italic;
-  }
   
   //
   // Header.
@@ -113,7 +337,17 @@ html, body {
   
   .generator {
     text-align: center;
-    margin: $inter-spacing * 2;
+    
+    .grouped-container {
+      background: $background-color-secondary;
+    }
+    
+    .grouped-wrapper {
+      max-width: $large-width;
+      margin: 0 auto;
+      
+      padding: ($inter-spacing * 2) 0;
+    }
     
     @media only screen and (max-width: 370px) {
       margin-left: 0px;
@@ -135,13 +369,16 @@ html, body {
         transition: opacity ease-out 0.2s;
         
         &[disabled] {
+          cursor: not-allowed;
           opacity: 0.5;
         }
       }
       
       .label {
-        font-size: 17px;
+        font-size: 22px;
         font-weight: 600;
+        
+        line-height: 1.2;
       }
       
       .icon {
@@ -151,7 +388,7 @@ html, body {
     }
     
     aside {
-      font-size: 14px;
+      font-size: 17px;
       color: $label-color-tertiary;
       
       a {
@@ -167,17 +404,6 @@ html, body {
   //
   
   .where-did-it-go {
-    background: $background-color-secondary;
-    border-radius: 16px;
-    
-    .container {
-      padding: $margin;
-      padding-bottom: 0;
-    }
-    
-    header {
-      color: #FB0D44; 
-    }
     
     .open-wallet li {
       display: table;
@@ -196,8 +422,10 @@ html, body {
       
     }
     
-    .screenshot {
-      max-width: 80%;
+    .device {
+      position: relative;
+      
+      max-width: 300px;
       margin: 0 auto;
       margin-top: $inter-spacing * 2;
       
@@ -207,6 +435,16 @@ html, body {
       background-size: cover;
       background-position: top center;
       background-image: url(img/Screenshot@2x.png);
+      
+      box-shadow: inset 0px -2px 0px rgba(black, 0.1);
+      
+      $height-scaling-sizes: ($base-width: 400px, $medium-width: 500px);
+      
+      @each $width, $height in $height-scaling-sizes {
+        @include at-minimum($width) {
+          height: $height;
+        }
+      }
     }
     
   }
@@ -217,23 +455,23 @@ html, body {
   
   .qa {
     
-    header h2 {
+    header {
+      text-align: center;
       $spacing: 10px;
       
-      display: table;
-      width: 100%;
-      
       figure {
-        margin-top: $spacing;
+        display: block;
+        margin: 0 auto;
       }
-      
-      span {
-        display: table-cell;
-        vertical-align: middle;
-        width: 100%;
-        
-        padding-left: $spacing;
-      }
+    }
+    
+    .questions > li + li {
+      margin-top: 2em;
+    }
+    
+    .tagline {
+      display: block;
+      color: $label-color-secondary;
     }
       
   }
@@ -247,6 +485,7 @@ html, body {
     color: $label-color-tertiary;
     
     margin-top: $inter-spacing * 2;
+    margin-bottom: $inter-spacing * 5;
     
     a {
       font-weight: 600;

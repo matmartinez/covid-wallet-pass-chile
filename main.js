@@ -7,7 +7,7 @@ class Widget {
     const { state } = this;
     
     return `<div class="widget">
-      <button class="add-to-wallet" data-action-add-to-wallet ${(state == WidgetState.adding) ? "disabled" : ""}>${this.addToAppleWalletIcon()}</button>
+      <button class="add-to-wallet" data-action-add-to-wallet ${(state == WidgetState.adding || state == WidgetState.unsupported) ? "disabled" : ""}>${this.addToAppleWalletIcon()}</button>
       
       <figure class="icon">${this.accessoryIconForState(state)}</figure>
       <span class="label">${this.labelForState(state)}</span>
@@ -19,7 +19,8 @@ class Widget {
       initial: "Añadir el pase requiere el PDF de tu Comprobante de Vacunación.",
       adding: "Generando el pase…",
       done: "¡Listo!",
-      error: `Hubo un problema al intentar generar el pase. Puedes intentarlo otra vez con un archivo diferente o <a href="https://twitter.com/martinez">escribirme</a>.`
+      error: `Hubo un problema al intentar generar el pase. Puedes intentarlo otra vez con un archivo diferente o <a href="https://twitter.com/martinez">escribirme</a>.`,
+      unsupported: "Abre este sitio web desde Safari para generar el pase."
     }[state];
   }
   
@@ -28,7 +29,8 @@ class Widget {
       initial: "doc",
       adding: "progress",
       done: "check",
-      error: "exclamation"
+      error: "exclamation",
+      unsupported: "browser"
     }[state];
     
     return `<svg width="22" height="22" aria-hidden="true">
@@ -48,7 +50,8 @@ const WidgetState = {
   initial: "initial",
   adding: "adding",
   done: "done",
-  error: "error"
+  error: "error",
+  unsupported: "unsupported"
 };
 
 const main = () => {
@@ -93,6 +96,14 @@ const main = () => {
     });
     
     renderer.attach(widgetUI, WidgetState.initial);
+    
+    // Unsupported browser hack:
+    // For some reason, Chrome for iOS won't handle passes correctly.
+    // Note: "CriOS" matches Chrome for iOS https://developer.chrome.com/docs/multidevice/user-agent/
+    const unsupportedMobileSafari = (navigator.userAgent.match("CriOS"));
+    if (unsupportedMobileSafari) {
+      widgetUI.set(WidgetState.unsupported);
+    }
   };
   
   document.addEventListener("DOMContentLoaded", bind);  
