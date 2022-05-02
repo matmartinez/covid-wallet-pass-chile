@@ -375,10 +375,11 @@ html, body {
       }
       
       .label {
+        display: block;
+        margin-top: 0;
+        
         font-size: 22px;
         font-weight: 600;
-        
-        line-height: 1.2;
       }
       
       .icon {
