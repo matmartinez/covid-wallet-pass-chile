@@ -7,7 +7,7 @@ class Widget {
     const { state } = this;
     
     return `<div class="widget">
-      <button class="add-to-wallet" data-action-add-to-wallet ${(state == WidgetState.adding || state == WidgetState.unsupported) ? "disabled" : ""}>${this.addToAppleWalletIcon()}</button>
+      <button class="add-to-wallet" data-action-add-to-wallet ${(state == WidgetState.adding || state == WidgetState.unsupported) ? "disabled" : ""} aria-label="Añadir a Apple Wallet">${this.addToAppleWalletIcon()}</button>
       
       <figure class="icon">${this.accessoryIconForState(state)}</figure>
       <span class="label">${this.labelForState(state)}</span>
