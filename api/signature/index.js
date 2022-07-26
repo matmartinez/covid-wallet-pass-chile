@@ -4,7 +4,7 @@ import * as forge from 'node-forge';
 
 const APPLE_CA_CERTIFICATE = forge.pki.certificateFromPem(
   process.env.APPLE_WWDR_CERT_PEM ||
-    `-----BEGIN CERTIFICATE-----
+  `-----BEGIN CERTIFICATE-----
 MIIEIjCCAwqgAwIBAgIIAd68xDltoBAwDQYJKoZIhvcNAQEFBQAwYjELMAkGA1UE
 BhMCVVMxEzARBgNVBAoTCkFwcGxlIEluYy4xJjAkBgNVBAsTHUFwcGxlIENlcnRp
 ZmljYXRpb24gQXV0aG9yaXR5MRYwFAYDVQQDEw1BcHBsZSBSb290IENBMB4XDTEz
@@ -33,7 +33,7 @@ tGwPDBUf
 
 const PASS_CERTIFICATE = forge.pki.certificateFromPem(
   process.env.PASS_CERT_PEM ||
-`-----BEGIN CERTIFICATE-----
+  `-----BEGIN CERTIFICATE-----
 MIIGBDCCBOygAwIBAgIIfKvB+mwAIUQwDQYJKoZIhvcNAQEFBQAwgZYxCzAJBgNV
 BAYTAlVTMRMwEQYDVQQKDApBcHBsZSBJbmMuMSwwKgYDVQQLDCNBcHBsZSBXb3Js
 ZHdpZGUgRGV2ZWxvcGVyIFJlbGF0aW9uczFEMEIGA1UEAww7QXBwbGUgV29ybGR3
@@ -70,7 +70,7 @@ tooYXp9SuAk=
 -----END CERTIFICATE-----`,
 );
 
-function signManifest(key, manifest){
+function signManifest(key, manifest) {
   // create PKCS#7 signed data
   const p7 = forge.pkcs7.createSignedData();
   p7.content = manifest;
@@ -101,13 +101,13 @@ function signManifest(key, manifest){
    * Creating a detached signature because we don't need the signed content.
    */
   p7.sign({ detached: true });
-  
+
   return Buffer.from(forge.asn1.toDer(p7.toAsn1()).getBytes(), 'binary');
 }
 
 module.exports = async (event, response) => {
   const manifest = event.body;
-  
+
   try {
     const parsedManifest = JSON.parse(manifest);
 
@@ -116,12 +116,12 @@ module.exports = async (event, response) => {
       return response.status(400).send('manifest is malformed');
     }
     const keys = Object.keys(parsedManifest).sort()
-    const refKeys = ["icon@2x.png", "icon@3x.png", "logo@2x.png", "logo@3x.png", "pass.json"]
+    const refKeys = ["icon.png", "icon@2x.png", "icon@3x.png", "logo@2x.png", "logo@3x.png", "pass.json"]
 
     if (JSON.stringify(keys) !== JSON.stringify(refKeys)) {
       return response.status(400).send('manifest missing mandatory keys. Got ' + JSON.stringify(keys) + ' but waiting ' + JSON.stringify(refKeys));
     }
-    
+
     for (const e of keys) {
       if ((typeof e !== "string") || e.length <= 0) {
         return response.status(400).send('manifest keys missing values');
@@ -130,25 +130,25 @@ module.exports = async (event, response) => {
   } catch (e) {
     return response.status(400).send('manifest is malformed');
   }
-  
+
   // Key:
   const signerKeyMessage = process.env.KEY;
   const signerKeyPassphrase = process.env.KEY_PASSPHRASE;
-  
+
   let key = forge.pki.decryptRsaPrivateKey(signerKeyMessage, signerKeyPassphrase);
-  
+
   if (!key) {
     return response.status(400).send('the private key cannot be decrypted');
   }
-  
+
   // Sign manifest:
   try {
-      const signature = signManifest(key, manifest);
-      const base64data = signature.toString('base64');
-      
-      return response.status(200).send(base64data);
-  
+    const signature = signManifest(key, manifest);
+    const base64data = signature.toString('base64');
+
+    return response.status(200).send(base64data);
+
   } catch (error) {
-      return response.status(500).send(error.status + error.message);
+    return response.status(500).send(error.status + error.message);
   }
 }
